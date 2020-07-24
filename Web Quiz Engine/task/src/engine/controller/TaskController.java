@@ -1,5 +1,7 @@
-package engine;
+package engine.controller;
 
+import engine.model.AnswerResponse;
+import engine.model.Quiz;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +17,7 @@ public class TaskController {
 
 
     static {
-        quizzes.add(new Quiz("The Java Logo",
+        quizzes.add(new Quiz(1,"The Java Logo",
                 "What is depicted on the Java logo?",
                 List.of("Robot", "Tea leaf", "cup of coffee", "Bug"),
                 2));

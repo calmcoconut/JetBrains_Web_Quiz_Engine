@@ -1,4 +1,6 @@
-package engine;
+package engine.model;
+
+import engine.model.AnswerResponse;
 
 import java.util.ArrayList;
 import java.util.List;
