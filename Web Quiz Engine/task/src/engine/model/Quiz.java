@@ -1,6 +1,7 @@
 package engine.model;
 
-import engine.model.AnswerResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import engine.repository.QuizRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,11 @@ public class Quiz {
     private List<String> options = new ArrayList<>();
     private int answerIndex;
 
-    public Quiz(int id, String title, String text, List<String> options, int answerIndex) {
-        this.id = id;
+    public Quiz(@JsonProperty("title") String title,
+                @JsonProperty("text") String text,
+                @JsonProperty("options") List<String> options,
+                @JsonProperty("answer") int answerIndex) {
+        this.id = QuizRepository.CURRENT_ID;
         this.title = title;
         this.text = text;
         this.options = options;
@@ -29,6 +33,10 @@ public class Quiz {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -41,7 +49,23 @@ public class Quiz {
         return this.options;
     }
 
-    public int getId() {
-        return id;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
+    }
+
+    public void setAnswerIndex(int answerIndex) {
+        this.answerIndex = answerIndex;
     }
 }

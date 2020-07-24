@@ -2,37 +2,45 @@ package engine.controller;
 
 import engine.model.AnswerResponse;
 import engine.model.Quiz;
+import engine.repository.QuizRepository;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class TaskController {
-    private static List<Quiz> quizzes = new ArrayList<>();
-
-
-    static {
-        quizzes.add(new Quiz(1,"The Java Logo",
-                "What is depicted on the Java logo?",
-                List.of("Robot", "Tea leaf", "cup of coffee", "Bug"),
-                2));
-    }
+    QuizRepository quizRepository = new QuizRepository();
 
     public TaskController() {
     }
 
-    @GetMapping(value = "/api/quiz", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Quiz getQuiz() {
-        return quizzes.get(0);
+    @GetMapping(value = "/api/quizzes/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Quiz getQuiz(@PathVariable("id") int id) {
+        return quizRepository.getQuizById(id);
     }
 
-    @PostMapping(value = "/api/quiz",produces = MediaType.APPLICATION_JSON_VALUE, consumes = "application/x-www-form-urlencoded")
-    public AnswerResponse answerQuiz(@RequestParam("answer") int answer) {
-        return quizzes.get(0).answerResponse(answer);
+    @GetMapping(value = "/api/quizzes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Quiz> getAllQuizzes() {
+        List<Quiz> quizzes = quizRepository.getQuizzes() != null ?
+                quizRepository.getQuizzes() : new ArrayList<>();
+        return quizRepository.getQuizzes();
+    }
+
+    @PostMapping(value = "/api/quizzes",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = "application/json")
+    public Quiz createQuiz(@RequestBody Quiz quiz) {
+        quizRepository.addQuiz(quiz);
+        return quiz;
+    }
+
+    @PostMapping(value = "/api/quizzes/{id}/solve",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = "application/x-www-form-urlencoded")
+    public AnswerResponse answerQuiz(@PathVariable("id") int id, @RequestParam("answer") int answer) {
+        return quizRepository.getQuizById(id).answerResponse(answer);
     }
 }
